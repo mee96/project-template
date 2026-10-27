@@ -17,6 +17,7 @@ new projects start from **Use this template → Create a new repository** and in
 - [ ] **Project board** (Projects → New project → Board): columns *Backlog · Ready · In progress · In review · Done*,
       grouped by milestone. Link it to the repo.
 - [ ] **Milestones**: one per phase (e.g. `v0.1 · MVP`, `v0.2 · …`).
+- [ ] **Tests**: replace `backend/app/main.py` and the example test with your own; keep `docs/specs/001-health-check.md` as a model or delete it.
 - [ ] **CHANGELOG.md** and a first release `v0.1.0` when the MVP works.
 - [ ] Remove sections that don't apply (e.g. *Main Endpoints* in a frontend-only project).
 
@@ -80,13 +81,41 @@ The language badges at the top use relative links, so they work in any repo.
 - **Commits**: [Conventional Commits](https://www.conventionalcommits.org/) — `feat:`, `fix:`, `refactor:`,
   `chore:`, `docs:`, `test:`, optional scope (`feat(auth): …`).
 - **Issues**: opened with the templates (bug / feature), with type + area + priority labels and a milestone.
+- **Specs (light SDD)**: every `feat:` starts with a short spec in `docs/specs/` (copy `_TEMPLATE.md`),
+  linked from the issue. Numbered acceptance criteria → each one becomes a test. Details in `docs/specs/README.md`.
+- **Tests**: every `feat:` and `fix:` ships with a unit test; a `fix:` test must fail without the fix.
+  TDD (test first, then the code) is recommended for tricky logic, not mandatory everywhere.
 - **Pull requests**: one issue per PR, `Closes #N` in the description (the issue closes and the card
   moves to *Done* on merge), checklist from the PR template ticked.
 - **Releases**: tag `vX.Y.Z` on `main`, notes taken from `CHANGELOG.md`.
 
 ---
 
-## 4. What's in this template
+## 4. Testing
+
+| Layer | Tool | Where | Run |
+|---|---|---|---|
+| Backend | `pytest` + FastAPI `TestClient`, `pytest-cov` | `backend/tests/test_*.py` | `cd backend && pip install -r requirements-dev.txt && pytest --cov=app` |
+| Frontend | Angular's default test runner (`ng test`) | next to the code, `*.spec.ts` | `cd frontend && npm test` |
+
+- **Name the test after the behaviour** (`test_health_rejects_non_get_methods`), and note the acceptance criterion in a comment.
+- **Arrange · Act · Assert**: one behaviour per test, no real network or database (use fakes or an in-memory DB).
+- **CI** runs both suites on every push and pull request, and fails if backend coverage drops below the threshold in `ci.yml`
+  (starts at 60 %; raise it as the project grows, never lower it).
+- Example frontend spec for a service:
+
+```ts
+describe('GreetingService', () => {
+  it('greets by name', () => {
+    const service = new GreetingService();
+    expect(service.greet('Carme')).toBe('Hello, Carme!');
+  });
+});
+```
+
+---
+
+## 5. What's in this template
 
 ```
 .github/
@@ -94,11 +123,17 @@ The language badges at the top use relative links, so they work in any repo.
 ├── pull_request_template.md
 ├── labels.yml           shared label set (type · area · priority · status)
 └── workflows/
-    ├── ci.yml           builds frontend/ and checks backend/ (each job skips until its folder is set up)
+    ├── ci.yml           builds frontend/, runs unit tests with coverage (each job skips until its folder is set up)
     └── sync-labels.yml  applies labels.yml to the repo
-backend/.env.example
+backend/
+├── app/main.py          minimal FastAPI app with GET /health
+├── tests/               example unit tests (pytest)
+├── requirements.txt · requirements-dev.txt · pytest.ini
+└── .env.example
 frontend/
-docs/screenshots/
+docs/
+├── specs/               _TEMPLATE.md · 001-health-check.md (example) · README.md
+└── screenshots/
 docs/README_GUIDE.md     this file
 README.md · README.es.md · README.ca.md
 CHANGELOG.md · .gitignore · .editorconfig

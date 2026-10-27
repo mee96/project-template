@@ -24,6 +24,12 @@ body:
       placeholder: |
         - [ ] …
         - [ ] …
+  - type: input
+    id: spec
+    attributes:
+      label: Spec
+      description: Link to the spec in docs/specs/ (copy _TEMPLATE.md first). Leave empty for small changes.
+      placeholder: docs/specs/002-….md
   - type: dropdown
     id: area
     attributes:

@@ -143,6 +143,13 @@ ng serve
 
 > Abre `http://localhost:4200` ✨
 
+### Tests
+
+```bash
+cd backend && pip install -r requirements-dev.txt && pytest --cov=app   # backend
+cd frontend && npm test                                                # frontend
+```
+
 <br/>
 
 ---
@@ -168,7 +175,9 @@ DB_PASSWORD=...
 * <img src="https://api.iconify.design/ph/git-branch-bold.svg?color=%232FB5AE&height=16" height="14"> **Gitflow:** `main` (producción) · `develop` (integración) · ramas `feature/*`, `fix/*`, `chore/*` que entran mediante pull requests.
 * <img src="https://api.iconify.design/ph/git-commit-bold.svg?color=%232FB5AE&height=16" height="14"> **Conventional Commits:** `feat:`, `fix:`, `refactor:`, `chore:`, `docs:`…
 * <img src="https://api.iconify.design/ph/kanban-bold.svg?color=%232FB5AE&height=16" height="14"> **Planificación:** issues con labels y milestones, seguidas en el [tablero del proyecto](../../projects).
-* <img src="https://api.iconify.design/ph/check-circle-bold.svg?color=%232FB5AE&height=16" height="14"> **CI:** GitHub Actions compila el frontend y comprueba el backend en cada pull request.
+* <img src="https://api.iconify.design/ph/file-text-bold.svg?color=%232FB5AE&height=16" height="14"> **Primero la spec:** cada feature empieza con una spec corta en [`docs/specs/`](docs/specs) cuyos criterios de aceptación se convierten en tests.
+* <img src="https://api.iconify.design/ph/flask-bold.svg?color=%232FB5AE&height=16" height="14"> **Tests:** tests unitarios de backend y frontend; cada `feat:` y `fix:` lleva su test.
+* <img src="https://api.iconify.design/ph/check-circle-bold.svg?color=%232FB5AE&height=16" height="14"> **CI:** GitHub Actions compila el frontend, ejecuta los tests unitarios con cobertura y comprueba el backend en cada pull request.
 
 <br/>
 
